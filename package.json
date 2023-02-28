@@ -13,6 +13,7 @@
   "author": "Ahmad Reza",
   "license": "ISC",
   "dependencies": {
+    "ejs": "^3.1.8",
     "express": "^4.18.2"
   }
 }

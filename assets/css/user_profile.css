@@ -1,3 +1,7 @@
 body {
-    background-color: red;
-}
+  background-color: lightblue; }
+  body h1 {
+    text-align: center; }
+  body p1 {
+    display: flex;
+    justify-content: space-between; }

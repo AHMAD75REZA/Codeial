@@ -1,0 +1,16 @@
+#header-h1 {
+  border: 2px solid red;
+  display: flex;
+  justify-content: space-between;
+  background-color: green; }
+  #header-h1 > ul {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 5px;
+    margin-right: 10px;
+    list-style: none;
+    padding-right: 5px; }
+    #header-h1 > ul li {
+      margin-right: 5px; }
+      #header-h1 > ul li > li {
+        margin-right: 5px; }

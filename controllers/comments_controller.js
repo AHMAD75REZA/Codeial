@@ -22,10 +22,27 @@ module.exports.create = function (req, res) {
         }
     });
 }
+module.exports.detroy = function (req, res) {
+    Comment.findById(req.params.id, function (err, comment) {
+        if (comment.user == req.user.id) {
 
-// module.exports.create = async function (req, res) {   
+            let postId = comment.post;
+
+            comment.remove();
+
+            Post.findByIdAndUpdate(postId, { $pull: { comments: req.params.id } }, function (err, post) {
+                return res.redirect('back');
+            })
+        } else {
+            return res.redirect('back');
+        }
+    });
+}
+
+
+// module.exports.create = async function (req, res) {
 //     let post = await Post.findById(req.body.post);
-//     if (post) {     
+//     if (post) {
 //       let comment = await new Comment({
 //         content: req.body.content,
 //         post: req.body.post,
@@ -34,8 +51,8 @@ module.exports.create = function (req, res) {
 //       if (comment) {
 //        await comment.save();
 //         post.comments.push(comment);
-//         post.save();      
+//         post.save();
 //         res.redirect("/");
-//       }   
-//     } 
+//       }
+//     }
 //   }

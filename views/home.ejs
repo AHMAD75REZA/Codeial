@@ -4,6 +4,7 @@
     <title>
         <%= title %>
     </title>
+    <link rel="stylesheet" href="/css/home.css">
 </head>
 
 <body>
@@ -11,65 +12,80 @@
 </body>
 
 </html>
-
-<section>
-    <h4>Posts</h4>
-    <% if(locals.user) {%>
-        <form action="/posts/create" id="new-post-form" method="POST">
-            <textarea name="content" cols="30" rows="3" placeholder="Type here..." required></textarea>
-            <input type="submit" value="Post">
-        </form>
-        <%}%>
-
-
-            <div id="posts-list-container">
-                <ul>
-                    <% for(post of posts){ %>
+<div id="home-container">
+    <section id="feed-posts">
+        <h4>Posts</h4>
+        <% if(locals.user) {%>
+            <form action="/posts/create" id="new-post-form" method="POST">
+                <textarea name="content" cols="30" rows="3" placeholder="Type here..." required></textarea>
+                <input type="submit" value="Post">
+            </form>
+            <%}%>
 
 
-                        <p>
-                            <small>
-                                <a href="/posts/destroy/<%= post.id %>">Xdelete</a>
-                            </small>
+                <div id="posts-list-container">
+                    <ul>
+                        <% for(post of posts){ %>
 
-                            <%= post.content %>
-                                <br>
+
+                            <p>
                                 <small>
-                                    <%= post.user%>
+                                    <a href="/posts/destroy/<%= post.id %>">Xdelete</a>
                                 </small>
-                        </p>
-                        <div class="post-comments">
-                            <% if(locals.user){ %>
-                                <form action="/comments/create" method="POST">
-                                    <input type="text" name="content" placeholder="Type here to add comment..."
-                                        required>
-                                    <input type="hidden" name="post" value="<%= post._id %>">
-                                    <input type="submit" value="Add comment">
-                                </form>
-                                <% } %>
-                                    <div class="post-comments-list">
-                                        <ul id="post-comments-<%= post._id %>">
-                                            <% for(comment of post.comments){ %>
-                                                <p>
 
-                                                    <small>
-                                                        <a href="/comments/destroy/<%= comment.id %>">Xdelete</a>
-                                                    </small>
+                                <%= post.content %>
+                                    <br>
+                                    <small>
+                                        <%= post.user%>
+                                    </small>
+                            </p>
+                            <div class="post-comments">
+                                <% if(locals.user){ %>
+                                    <form action="/comments/create" method="POST">
+                                        <input type="text" name="content" placeholder="Type here to add comment..."
+                                            required>
+                                        <input type="hidden" name="post" value="<%= post._id %>">
+                                        <input type="submit" value="Add comment">
+                                    </form>
+                                    <% } %>
+                                        <div class="post-comments-list">
+                                            <ul id="post-comments-<%= post._id %>">
+                                                <% for(comment of post.comments){ %>
+                                                    <p>
 
-                                                    <%= comment.content %>
-                                                        <br>
                                                         <small>
-                                                            <%= comment.user.name %>
+                                                            <a href="/comments/destroy/<%= comment.id %>">Xdelete</a>
                                                         </small>
-                                                </p>
-                                                <% } %>
+
+                                                        <%= comment.content %>
+                                                            <br>
+                                                            <small>
+                                                                <%= comment.user.name %>
+                                                            </small>
+                                                    </p>
+                                                    <% } %>
 
 
-                                        </ul>
-                                    </div>
-                        </div>
-                        </li>
-                        <% }%>
-                </ul>
-            </div>
-</section>
+                                            </ul>
+                                        </div>
+                            </div>
+                            </li>
+                            <% }%>
+                    </ul>
+                </div>
+    </section>
+
+    <section id="user-friends">
+        <h4>Friends</h4>
+
+        <% for(u of all_users) { %>
+
+            <p>
+                <a href="/users/profile/<%= u.id %>">
+                    <%= u.name %>
+                </a>
+            </p>
+
+            <% } %>
+    </section>
+</div>

@@ -52,10 +52,11 @@
                                             <ul id="post-comments-<%= post._id %>">
                                                 <% for(comment of post.comments){ %>
                                                     <p>
-
+                                                        
                                                         <small>
                                                             <a href="/comments/destroy/<%= comment.id %>">Xdelete</a>
                                                         </small>
+
 
                                                         <%= comment.content %>
                                                             <br>

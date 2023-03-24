@@ -6,7 +6,9 @@ const User = require('../models/user');
 
 //authentication using passport
 passport.use(new LocalStrategy({
-    usernameField: 'email'
+    usernameField: 'email',
+    passwordField: 'password',
+    passReqToCallback: false
 },
     function (email, password, done) {
         //find user and established the identity
@@ -14,11 +16,14 @@ passport.use(new LocalStrategy({
         User.findOne({ email: email }, function (err, user) {
             if (err) {
                 console.log('Error in finding user --> passport');
+                // req.flash('error', 'error in finding user');
                 return done(err);
             }
 
             if (!user || user.password != password) {
                 console.log('Invalid Username/password inside passport');
+                // req.flash('error', 'Invalid Username/password');
+
                 return done(null, false);
             }
             return done(null, user);
@@ -61,7 +66,7 @@ passport.checkAuthentication = function (req, res, next) {
 passport.setAuthenticatedUser = function (req, res, next) {
     if (req.isAuthenticated()) {
         //req.user is current signed in user from the session cookie and we are just sending this to locals for the views
-      
+
         res.locals.user = req.user;
     }
     next();

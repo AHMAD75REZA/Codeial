@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const fs = require('fs');
+const path = require('path');
 
 module.exports.profile = function (req, res) {
     // res.end('<h1> User profile </h1>');
@@ -25,14 +27,50 @@ module.exports.profile = function (req, res) {
     });
 }
 
-module.exports.update = function (req, res) {
+module.exports.update = async function (req, res) {
     if (req.user.id == req.params.id) {
-        User.findByIdAndUpdate(req.params.id, req.body, function (err, user) {
+
+        try {
+            let user = await User.findById(req.params.id);
+            // console.log(user);
+            User.uploadedAvatar(req, res, function (err) {
+                if (err) { console.log('*****Multer error: ', err) }
+
+                // console.log(req.file);
+                user.name = req.body.name;
+                user.email = req.body.email;
+                if (req.file) {
+                    // if (user.avatar) {
+                    //     fs.unlinkSync(path.join(__dirname, "..", user.avatar));
+                    // }
+                    fs.unlink("./uploads/users" + req.file.filename, (err) => {
+                        if (err) {
+                            console.log("failed to delete local image:" + err);
+                        } else {
+                            console.log('successfully deleted local image');
+                        }
+                    });
+
+                    //    this is saving the path of the uploaded file into the avatar
+                    user.avatar = User.avatarPath + '/' + req.file.filename;
+                }
+                user.save();
+                console.log(req.body);
+                console.log(req.file);
+                return res.redirect('back');
+
+            });
+            // User.findByIdAndUpdate(req.params.id, req.body, function (err, user) {
+            //     return res.redirect('back');
+            // });
+        } catch (err) {
+            req.flash('error', err);
             return res.redirect('back');
-        });
+        }
 
     } else {
-        return res.status(401).send(Unauthorized);
+        req.flash('error', 'unauthorized!');
+        return res.status(401).send("Unauthorized");
     }
 }
 
@@ -206,12 +244,12 @@ module.exports.createSession = function (req, res) {
 
 //     return res.redirect('/');
 // }
-module.exports.destroySession = function(req, res){
-    req.logout(function(err) {
+module.exports.destroySession = function (req, res) {
+    req.logout(function (err) {
         if (err) { return next(err); }
-    req.flash('success', 'You have logged out!');
+        req.flash('success', 'You have logged out!');
 
-    
-    return res.redirect('/');
-});
+
+        return res.redirect('/');
+    });
 };

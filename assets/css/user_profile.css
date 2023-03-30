@@ -2,6 +2,6 @@ body {
   background-color: lightblue; }
   body h1 {
     text-align: center; }
-  body p1 {
+  body p {
     display: flex;
     justify-content: space-between; }

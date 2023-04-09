@@ -5,6 +5,7 @@
         <%= title %>
     </title>
     <link rel="stylesheet" href="/css/home.css">
+
 </head>
 
 <body>
@@ -38,6 +39,23 @@
                                         <small>
                                             <%= post.user%>
                                         </small>
+
+                                        <!-- CHANGE:: display the likesof this post, if the user is logged in, then show the link to toggle likes, else, just show the count -->
+                                        <br>
+                                        <!-- study about the data attribute -->
+                                        <small>
+                                            <% if(locals.user){ %>
+                                                <a class="toggle-like-button" data-likes="<%= post.likes.length %>"
+                                                    href="/likes/toggle/?id=<%=post._id%>&type=Post">
+                                                    <%= post.likes.length %> likes
+                                                </a>
+
+                                                <%} else{%>
+
+                                                    <%= post.likes.length %>Likes
+                                                        <%}%>
+
+                                        </small>
                                 </p>
                                 <div class="post-comments">
                                     <% if(locals.user){ %>
@@ -63,6 +81,23 @@
                                                                 <br>
                                                                 <small>
                                                                     <%= comment.user.name %>
+                                                                </small>
+                                                                <!-- CHANGE:: display the likesof this post, if the user is logged in, then show the link to toggle likes, else, just show the count -->
+                                                                  <br>
+                                                                  <!-- study about the data attribute -->
+
+                                                                <small>
+                                                                    <% if(locals.user){ %>
+                                                                        <a class="toggle-like-button" data-likes="<%= post.likes.length %>"
+                                                                            href="/likes/toggle/?id=<%=comment._id%>&type=Comment">
+                                                                            <%= comment.likes.length %> likes
+                                                                        </a>
+                        
+                                                                        <%} else{%>
+                        
+                                                                            <%= comment.likes.length %>Likes
+                                                                                <%}%>
+                        
                                                                 </small>
                                                         </p>
                                                         <% } %>
@@ -93,4 +128,15 @@
     </section>
 </div>
 
-<script src="/js/home_posts.js"> </script>
+<!-- importing this script for creating the comments -->
+<script src="/js/home_post_comments.js" ></script>
+<script src="/js/home_posts.js"></script>
+
+<!-- CHANGE :: import the script file for toggle likes, also run it over for the already present posts and comments on the page -->
+<script src="js/toggle_likes.js"></script>
+<script>
+    $('.toggle-like-button').each(function(){
+        let self = this;
+        let toggleLike = new ToggleLike(self);
+    });
+</script>
